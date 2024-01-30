@@ -15,8 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
+# When a request hits a server, Django will take the URL from the requests, and match it to the first URL it finds here.
+# Include is a function we can use to include URLs from other apps in the root project URLs.
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('profiles_api.urls'))
 ]
