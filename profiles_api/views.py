@@ -3,6 +3,8 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from . import serializers
 from . import models
@@ -23,6 +25,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email')
+
+
+# Vid. 55
+class UserLoginAPIView(ObtainAuthToken):
+    """ Handle creating user authenticatio tokens """
+    # We add this line to enable HTML view to be rendered in a browser
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 # APIView expexts a function for the different HTTP requests that can be made to the view.

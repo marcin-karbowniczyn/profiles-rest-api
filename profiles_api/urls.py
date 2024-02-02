@@ -21,6 +21,7 @@ router.register('profile', views.UserProfileViewSet)
 # include() -> this is used for including list of URLs inte URL pattern and assigning the lists to a specific URL
 urlpatterns = [
     path('hello-view/', views.HelloAPIView.as_view()),
+    path('login/', views.UserLoginAPIView.as_view()),
     # When we register new routes in our router, it generates a list of URLs that are associated with our ViewSet.
     # It figures out the URLs that are required for all the functions that we add to our ViewSet, and then it generates the URLs list which we can pass in to the path using include.
     path('', include(router.urls))
