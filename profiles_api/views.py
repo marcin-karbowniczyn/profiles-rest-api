@@ -1,19 +1,25 @@
 from rest_framework.views import APIView
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+
 from . import serializers
 from . import models
+from . import permissions
 
 
 # APIView -> takes functions that map to HTTP methods (GET, POST, PATCH etc.)
 # ViewSets -> takes functions that map to common API actions (list, create, update, destroy)
 # The main difference is that an APIView can handle a single HTTP request, while a Viewset can handle multiple HTTP requests.
 
+# Behind the scenes the ModelViewSet will handle the request, pass the data into the serializer, and then call the create() method on the serializer instance.
+# Then, the created object is returned back to the ViewSet in-case any further processing is required.
 class UserProfileViewSet(viewsets.ModelViewSet):
     """ Handle creating and updating profiles """
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateOwnProfile,)
 
 
 # APIView expexts a function for the different HTTP requests that can be made to the view.

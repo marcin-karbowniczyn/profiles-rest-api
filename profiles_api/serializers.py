@@ -30,9 +30,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {
                 'write_only': True,
+                'min_length': 8,
                 'style': {'input_type': 'password'}
             }
         }
+
+    # def validate(self, data):
+    #     if len(data['password']) < 8:
+    #         raise serializers.ValidationError('Password must have at least 8 characters.')
 
     # Whenever we create a new object with our UserProfileSerializer, it will validate the fields provided to the serializer,
     # and then it will call the create function, passing in the validated data.
