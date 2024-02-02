@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
-# Out of the box, Django comes with a default user model, that's used for the standard auth system and also tje Django admin.
+# Out of the box, Django comes with a default user model, that's used for the standard auth system and also the Django admin.
 # We are overriding this model with a custom User model, to user email, instead of the standard username which comes with a default User model.
 # We define a CustomUserModel, inherit from AbstractBaseUser and PermissionsMixin, to inherit some methods which are important for auth.
 # We need to specify some key implementation details, such as USERNAME_FIELD and REQUIRED_FIELDS

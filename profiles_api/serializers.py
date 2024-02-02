@@ -2,6 +2,10 @@ from rest_framework import serializers
 from . import models
 
 
+# Each field in a Form class is responsible not only for validating data, but also for "cleaning" it — normalizing it to a consistent format.
+# Serializer fields handle converting between primitive values and internal datatypes.
+# They also deal with validating input values, as well as retrieving and setting the values from their parent objects.
+
 # Serializer - kod który pozwala na łatwe przekonwertowanie data inputs w Python objects. Coś jak JSON.parse(), albo app.json(), czyli konwertujemy JSON w JS/Python obiekt i na odwrót.
 # Serializer -> Odpowiada za serializację, ale też validację data którą otrzymujemy. W Mongoose to Model był odpowiedzialny za validację, tutaj Serializers odpowiadają za validację i konwersję danych.
 # Model -> Opisuje tablicę w naszej DB, to blueprint, jak w DB będzie zapisany konkretny obiekt
@@ -20,7 +24,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.UserProfile
-        fields = ('id', 'email', 'name', 'password')
+        # Serializer fields handle converting between primitive values and internal datatypes.
+        # They also deal with validating input values, as well as retrieving and setting the values from their parent objects.
+        fields = ('id', 'name', 'email', 'password')
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -30,9 +36,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     # Whenever we create a new object with our UserProfileSerializer, it will validate the fields provided to the serializer,
     # and then it will call the create function, passing in the validated data.
+    # Jeśli dobrze rozumiem, to Serializer używa Managera stworzyć obiekt.
     def create(self, validated_data):
         """ Create and return a new user """
-        user = models.UserProfile.objects.create_user(email=validated_data['email'],
-                                                      name=validated_data['name'],
+        user = models.UserProfile.objects.create_user(name=validated_data['name'],
+                                                      email=validated_data['email'],
                                                       password=validated_data['password'])
+
+        # The object returned by create is then serialized as the response (with the 201 status) which is why it is required and not just optional.
         return user
+
+    def update(self, instance, validated_data):
+        """Handle updating user account"""
+        if 'password' in validated_data:
+            password = validated_data.pop('password')
+            instance.set_password(password)
+
+        return super().update(instance, validated_data)

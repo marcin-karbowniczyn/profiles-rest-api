@@ -15,6 +15,8 @@ from . import views
 # jaka metoda będzie przypisana do jakiego requesta HTTP i następnie produkuje liste URLs które podpinamy do urlpatterns.
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, basename='hello_viewset')  # With routers, we don't need to add slashes in the url, it will be handled for us automatically
+# We don't need a basename, because we have a queryset declared in UserProfileViewSet, and Django will figure out the name from the Model assigned to this ViewSet
+router.register('profile', views.UserProfileViewSet)
 
 # include() -> this is used for including list of URLs inte URL pattern and assigning the lists to a specific URL
 urlpatterns = [
