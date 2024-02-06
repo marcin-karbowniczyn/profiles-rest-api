@@ -58,3 +58,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     # def validate(self, data):
     #     if len(data['password']) < 8:
     #         raise serializers.ValidationError('Password must have at least 8 characters.')
+
+
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """ Serializers profile feed items """
+
+    class Meta:
+        model = models.ProfileFeedItem
+        # id and created_on are by default set up by Django as read-only. They are created by the DB
+        fields = ('id', 'user_profile', 'status_text', 'created_on')
+        extra_kwargs = {
+            'user_profile': {
+                'read_only': True,
+            }
+        }
