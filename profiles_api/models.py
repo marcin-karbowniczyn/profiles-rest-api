@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.conf import settings  # Retrieve settings from settings.py file in the Django Project
 
 
 # Out of the box, Django comes with a default user model, that's used for the standard auth system and also the Django admin.
@@ -9,12 +10,16 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 # The UserProfile Class represents user profile objects in the database. The UserProfileManager is used to manage these objects.
 # A Manager is the interface through which database query operations are provided to Django models. At least one Manager exists for every model in a Django application.
-# The way the manager works, is you specify some functions within the manager taht can be used to manipulate objects within the model (object of the database).
+# The way the manager works, is you specify some functions within the manager that can be used to manipulate objects within the model (object of the database).
 
 # BaseUserManager -> Default User Manager that comes with Django.
+# Mark said, that we created a Manager, so Django knows how to work with our custom User Model in the Django CLI Tools. Serializer also uses these methods.
+# Serializer will call a create() method of a Model we specified in the Meta Class of the Serializer.
+
 class UserProfileManager(BaseUserManager):
     """ Manager for user profiles """
 
+    # This method is being called by the Serializer in which we pass
     def create_user(self, email, name, password=None):
         """ Create a new user profile """
         if not email:
@@ -58,5 +63,19 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         """ Retrieve the short name of the user """
         return self.name
 
+    # What to do when we convert a model instance into a string.
     def __str__(self):
+        """ Return a model as a String """
         return self.email
+
+
+class ProfileFeedItem(models.Model):
+    """ Profile status update """
+    user_profile = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    # What to do when we convert a model instance into a string.
+    def __str__(self):
+        """ Return a model as a String """
+        return self.status_text

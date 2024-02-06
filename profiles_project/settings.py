@@ -119,4 +119,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# We configure our Django Project to use our Custom User Model as a default User Model instead of this provided by Django.
 AUTH_USER_MODEL = 'profiles_api.UserProfile'

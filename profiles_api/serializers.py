@@ -35,13 +35,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             }
         }
 
-    # def validate(self, data):
-    #     if len(data['password']) < 8:
-    #         raise serializers.ValidationError('Password must have at least 8 characters.')
-
-    # Whenever we create a new object with our UserProfileSerializer, it will validate the fields provided to the serializer,
-    # and then it will call the create function, passing in the validated data.
-    # Jeśli dobrze rozumiem, to Serializer używa Managera stworzyć obiekt.
+    # Whenever we create a new object with our UserProfileSerializer, it will validate the fields provided to the serializer, and then it will call the create function, passing in the validated data.
+    # From Mark: The Django REST Framework ModelSerializer has a default create() function which is used for creating standard objects.
+    # From Mark: By default, it simply takes all the fields provided and passes them into the create() function of the model set in the Meta class.
     def create(self, validated_data):
         """ Create and return a new user """
         user = models.UserProfile.objects.create_user(name=validated_data['name'],
@@ -58,3 +54,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
+
+    # def validate(self, data):
+    #     if len(data['password']) < 8:
+    #         raise serializers.ValidationError('Password must have at least 8 characters.')
