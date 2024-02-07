@@ -4,7 +4,7 @@ from django.conf import settings  # Retrieve settings from settings.py file in t
 
 
 # Out of the box, Django comes with a default user model, that's used for the standard auth system and also the Django admin.
-# We are overriding this model with a custom User model, to user email, instead of the standard username which comes with a default User model.
+# We are overriding this model with a custom User model, to use email, instead of the standard username which comes with a default User model.
 # We define a CustomUserModel, inherit from AbstractBaseUser and PermissionsMixin, to inherit some methods which are important for auth.
 # We need to specify some key implementation details, such as USERNAME_FIELD and REQUIRED_FIELDS
 
@@ -14,7 +14,7 @@ from django.conf import settings  # Retrieve settings from settings.py file in t
 
 # BaseUserManager -> Default User Manager that comes with Django.
 # Mark said, that we created a Manager, so Django knows how to work with our custom User Model in the Django CLI Tools. Serializer also uses these methods.
-# Serializer will call a create() method of a Model we specified in the Meta Class of the Serializer.
+# Serializer will call a create() method of a Model's Manager we specified in the Meta Class of the Serializer.
 
 class UserProfileManager(BaseUserManager):
     """ Manager for user profiles """
@@ -22,6 +22,7 @@ class UserProfileManager(BaseUserManager):
     # This method is being called by the Serializer in which we pass
     def create_user(self, email, name, password=None):
         """ Create a new user profile """
+        print('This was called')
         if not email:
             raise ValueError('Users must have an email address.')
         email = self.normalize_email(email)  # This function makes sure that the second part of the email is lowercase
