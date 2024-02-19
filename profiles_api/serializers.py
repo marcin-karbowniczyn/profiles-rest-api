@@ -11,7 +11,7 @@ from . import models
 # Model -> Opisuje tablicę w naszej DB, to blueprint, jak w DB będzie zapisany konkretny obiekt
 # Manager -> Zawiera metody takie jak create, update itd. Odpowiada za działania w bazie danych. Możemy te metody napisywać.
 
-# Serializers is very similar to Django forms
+# Serializer is very similar to Django forms
 # Whenever a POST, PUT or PATCH requests is made, expect an input with name, and validate that input to a maximum length of 10
 class HelloSerializer(serializers.Serializer):
     """ Serializes a nane field for testing our APIView """
