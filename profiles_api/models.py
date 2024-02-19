@@ -1,33 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from django.conf import settings  # Retrieve settings from settings.py file in the Django Project
+from django.conf import settings
 
-
-# Out of the box, Django comes with a default user model, that's used for the standard auth system and also the Django admin.
-# We are overriding this model with a custom User model, to use email, instead of the standard username which comes with a default User model.
-# We define a CustomUserModel, inherit from AbstractBaseUser and PermissionsMixin, to inherit some methods which are important for auth.
-# We need to specify some key implementation details, such as USERNAME_FIELD and REQUIRED_FIELDS
-
-# The UserProfile Class represents user profile objects in the database. The UserProfileManager is used to manage these objects.
-# A Manager is the interface through which database query operations are provided to Django models. At least one Manager exists for every model in a Django application.
-# The way the manager works, is you specify some functions within the manager that can be used to manipulate objects within the model (object of the database).
 
 # BaseUserManager -> Default User Manager that comes with Django.
-# Mark said, that we created a Manager, so Django knows how to work with our custom User Model in the Django CLI Tools. Serializer also uses these methods.
-# Serializer will call a create() method of a Model's Manager we specified in the Meta Class of the Serializer.
-
 class UserProfileManager(BaseUserManager):
     """ Manager for user profiles """
 
-    # This method is being called by the Serializer in which we pass
     def create_user(self, email, name, password=None):
         """ Create a new user profile """
         print('This was called')
         if not email:
             raise ValueError('Users must have an email address.')
-        email = self.normalize_email(email)  # This function makes sure that the second part of the email is lowercase
+        email = self.normalize_email(email)
         user = self.model(email=email, name=name)
-        user.set_password(password)  # This method makes sure that password is encrypted
+        user.set_password(password)
         user.save(using=self._db)
 
         return user
@@ -64,7 +51,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         """ Retrieve the short name of the user """
         return self.name
 
-    # What to do when we convert a model instance into a string.
     def __str__(self):
         """ Return a model as a String """
         return self.email
@@ -76,7 +62,6 @@ class ProfileFeedItem(models.Model):
     status_text = models.CharField(max_length=255)
     created_on = models.DateTimeField(auto_now_add=True)
 
-    # What to do when we convert a model instance into a string.
     def __str__(self):
         """ Return a model as a String """
         return self.status_text

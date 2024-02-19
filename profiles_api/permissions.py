@@ -9,8 +9,7 @@ class UpdateOwnProfile(permissions.BasePermission):
         # Check permissions for read-only request
         if request.method in permissions.SAFE_METHODS:
             return True
-
-        # Wytłumaczone w video 50, obj == DB object we query for in the URL
+        
         return obj.id == request.user.id
 
 
@@ -21,5 +20,4 @@ class UpdateOwnStatus(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # obj.user_profile -> this will automatically be populated with a ForeignKey, user_profile ==  m.k@gmail.com object
         return obj.user_profile.id == request.user.id
